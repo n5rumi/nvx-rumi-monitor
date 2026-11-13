@@ -15,7 +15,7 @@
       }
     ]
   },
-  "description": "The XVM Stats dashboard provides monitoring information about the resources used by and applications running within a given XVM.",
+  "description": "The Container dashboard provides monitoring information about the resources used by and services running within a given container.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -65,7 +65,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "Lists summary details about the state of applications included in XVM heartbeats during the selected time interval. \n\nApplications that have since been unloaded will be listed here until there are no heartbeats that include their state reported in the selected time interval. \n\n* **Last Heartbeat**: The time of the last heartbeat received from the XVM. \n* **Application**: The name of the application\n* **State**: The state of the application as last reported in a heartbeat.\n* **Role**: The last reported HA role for the application \n* **HA Policy**: The application's HA Policy\n* **Loaded Time**: The time at which the application was loaded.",
+      "description": "Lists summary details about the state of services included in container heartbeats during the selected time interval. \n\nServices that have since been unloaded will be listed here until there are no heartbeats that include their state reported in the selected time interval. \n\n* **Last Heartbeat**: The time of the last heartbeat received from the container. \n* **Service**: The name of the service\n* **State**: The state of the service as last reported in a heartbeat.\n* **Role**: The last reported HA role for the service \n* **HA Policy**: The service's HA Policy\n* **Loaded Time**: The time at which the service was loaded.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -110,7 +110,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "VM"
+                "value": "Container"
               }
             ]
           },
@@ -233,7 +233,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The last reported CPU Usage for the Host (including other processes) as reported in the last collected XVM heartbeat.",
+      "description": "The last reported CPU Usage for the Host (including other processes) as reported in the last collected container heartbeat.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -331,7 +331,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The last reported CPU Usage for the application's process (including other apps in the XVM) as reported in the last collected XVM heartbeat.",
+      "description": "The last reported CPU Usage for the service's process (including other services in the container) as reported in the last collected container heartbeat.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -436,7 +436,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The last reported CPU Usage for the application's process (including other apps in the XVM) as reported in the last collected XVM heartbeat.",
+      "description": "The last reported CPU Usage for the service's process (including other services in the container) as reported in the last collected container heartbeat.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -541,7 +541,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The number of CPUs as reported in the last collected XVM heartbeat",
+      "description": "The number of CPUs as reported in the last collected container heartbeat",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -647,7 +647,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The number of CPUs as reported in the last collected XVM heartbeat",
+      "description": "The number of CPUs as reported in the last collected container heartbeat",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -745,7 +745,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The number of thread as reported in the last collected XVM heartbeat",
+      "description": "The number of thread as reported in the last collected container heartbeat",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1151,7 +1151,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows the heap memory usage for the process as reported by the last heartbeat received from the XVM.\n\n* **Heap Used**: The amount of heap memory currently used by the application. \n* **Heap Init**: The amount of heap memory that the Java virtual machine initially requested from the operating system.\n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum amount of memory in bytes that can be used for heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+      "description": "This graph shows the heap memory usage for the process as reported by the last heartbeat received from the container.\n\n* **Heap Used**: The amount of heap memory currently used by the service. \n* **Heap Init**: The amount of heap memory that the Java virtual machine initially requested from the operating system.\n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum amount of memory in bytes that can be used for heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1291,7 +1291,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows the non-heap memory usage for the process as reported by the last heartbeat received from this XVM.\n\n* **Non-Heap Used**: The amount of non-heap memory used by the process in which the application is running. \n* **Non-Heap Init**: The amount of non-heap memory that the Java virtual machine initially requests from the operating system.\n* **Non-Heap Committed**: This amount of non-heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Non-Heap Max**: The maximum amount memory in bytes that can be used for non-heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+      "description": "This graph shows the non-heap memory usage for the process as reported by the last heartbeat received from this container.\n\n* **Non-Heap Used**: The amount of non-heap memory used by the process in which the service is running. \n* **Non-Heap Init**: The amount of non-heap memory that the Java virtual machine initially requests from the operating system.\n* **Non-Heap Committed**: This amount of non-heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Non-Heap Max**: The maximum amount memory in bytes that can be used for non-heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1424,7 +1424,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this XVM.\n\n* **Bytes Live (Native)**: The amount of live off-heap memory that the process has directly allocated as native memory blocks. \n* **Bytes Live (IOBuf)**: The amount of live off-heap memory that the process is using via allocated IO Buffers. \n* **Bytes Pooled**: This amount of off-heap memory pooled/cached for future use.",
+      "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this container.\n\n* **Bytes Live (Native)**: The amount of live off-heap memory that the process has directly allocated as native memory blocks. \n* **Bytes Live (IOBuf)**: The amount of live off-heap memory that the process is using via allocated IO Buffers. \n* **Bytes Pooled**: This amount of off-heap memory pooled/cached for future use.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1556,7 +1556,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows overall memory usage for the host on which this XVM is running as reported by the last heartbeat received from this XVM. \n\n* **Host Used**: The total amount of physical memory currently in use on the host. \n* **Host Total**: The total amount of physical memory on the host. \n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+      "description": "This graph shows overall memory usage for the host on which this container is running as reported by the last heartbeat received from this container. \n\n* **Host Used**: The total amount of physical memory currently in use on the host. \n* **Host Total**: The total amount of physical memory on the host. \n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1757,7 +1757,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "When Binary heartbeat logging is enabled for the XVM, this graph charts this size of the file.",
+          "description": "When Binary heartbeat logging is enabled for the container, this graph charts this size of the file.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -1956,7 +1956,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "When binary heartbeat logging is enabled for the XVM, this table displays binary heartbeat logging statistics from the last heartbeat received from the XVM. \n\n* **Commits**: The number of times the logger has been committed.\n* **Heartbeats Logged**: The number of heartbeats logged to the file. \n* **File Size**: The size of the file in on disk. \n* **File Size Used**: The size of the file that is used (which may be less than File Size if the file was preallocated). \n*  **Average Entry Size**: The average size of entries logged.",
+          "description": "When binary heartbeat logging is enabled for the container, this table displays binary heartbeat logging statistics from the last heartbeat received from the container. \n\n* **Commits**: The number of times the logger has been committed.\n* **Heartbeats Logged**: The number of heartbeats logged to the file. \n* **File Size**: The size of the file in on disk. \n* **File Size Used**: The size of the file that is used (which may be less than File Size if the file was preallocated). \n*  **Average Entry Size**: The average size of entries logged.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2221,7 +2221,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "This panel reports heartbeat emission statistics for admin clients that have connected to the XVM during the selected time interval. \n\nThis table can be used to determine what data is being sent to each client and whether or not any data was dropped by the XVM due to client congestion. \n\n* **Q Capacity**: The size of the delivery queue for the admin client. \n* **Q Size**: The size of admin packets currently queued for delivery to the client. \n*  **Queued**: The number of admin packets currently queued for the client. \n* **Heartbeats Sent**: The cumulative number of heartbeats sent to the client:\n* **Heartbeats Dropped**: The number of heartbeats dropped for this client due to client congestion. \n* **Trace Records Sent**: The cumulative number of trace records sent to the client:\n* **Trace Records Dropped**: The number of trace records dropped for this client due to client congestion. \n* **Lifecycle Events Sent**: The cumulative number of lifecycle events sent to the client.",
+          "description": "This panel reports heartbeat emission statistics for admin clients that have connected to the container during the selected time interval. \n\nThis table can be used to determine what data is being sent to each client and whether or not any data was dropped by the container due to client congestion. \n\n* **Q Capacity**: The size of the delivery queue for the admin client. \n* **Q Size**: The size of admin packets currently queued for delivery to the client. \n*  **Queued**: The number of admin packets currently queued for the client. \n* **Heartbeats Sent**: The cumulative number of heartbeats sent to the client:\n* **Heartbeats Dropped**: The number of heartbeats dropped for this client due to client congestion. \n* **Trace Records Sent**: The cumulative number of trace records sent to the client:\n* **Trace Records Dropped**: The number of trace records dropped for this client due to client congestion. \n* **Lifecycle Events Sent**: The cumulative number of lifecycle events sent to the client.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -2849,7 +2849,7 @@
         "definition": "",
         "hide": 0,
         "includeAll": false,
-        "label": "XVM",
+        "label": "Container",
         "multi": false,
         "name": "vm_name",
         "options": [],
@@ -2876,7 +2876,7 @@
         "definition": "",
         "hide": 0,
         "includeAll": true,
-        "label": "Application",
+        "label": "Service",
         "multi": false,
         "name": "app_name",
         "options": [],
@@ -2922,7 +2922,7 @@
     ]
   },
   "timezone": "browser",
-  "title": "VM",
+  "title": "Container",
   "uid": "-u-KrYh7z",
   "version": 5,
   "weekStart": ""

@@ -1,0 +1,29 @@
+# Rumi Monitor image built by laying this branch's conf/ over a previously published image.
+#
+# Use it when a release changes ONLY conf/ (dashboards, datasource, grafana.ini): the full
+# Dockerfile recompiles Grafana's Go and JavaScript from source, which takes an amd64 builder with
+# 8 GB+ of memory, and gives the same binaries back. Anything outside conf/ (branding under
+# public/, pkg/, a Grafana upgrade) needs the full Dockerfile instead.
+#
+# Before relying on it, confirm the base image's conf/ is the commit you are building on, so the
+# overlay is the only difference:
+#   cid=$(docker create neeve/nvx-rumi-monitor:<base>); docker cp $cid:/usr/share/grafana/conf /tmp/base-conf
+#   git stash; diff -r /tmp/base-conf conf; git stash pop     # must print nothing
+#
+#   docker build --platform linux/amd64 -f Dockerfile.conf-overlay \
+#       --build-arg BASE_TAG=10.1.1.8 -t neeve/nvx-rumi-monitor:10.1.1.9 .
+
+ARG BASE_TAG
+FROM neeve/nvx-rumi-monitor:${BASE_TAG}
+
+USER root
+
+# Replace the dashboards wholesale so a renamed or removed dashboard file does not survive.
+RUN rm -rf /usr/share/grafana/conf/provisioning/dashboards
+COPY conf/provisioning/dashboards /usr/share/grafana/conf/provisioning/dashboards
+COPY conf/provisioning/datasources /usr/share/grafana/conf/provisioning/datasources
+COPY conf/grafana.ini /etc/grafana/grafana.ini
+COPY conf/provisioning/dashboards/dashboards.yaml /etc/grafana/provisioning/dashboards/
+COPY conf/provisioning/datasources/rumi-datasource.yaml /etc/grafana/provisioning/datasources/
+
+USER 472
