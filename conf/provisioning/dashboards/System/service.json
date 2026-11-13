@@ -66,7 +66,7 @@
         "type": "influxdb",
         "uid": "${datasource}"
       },
-      "description": "The application's last known state. An App in the Active state is ready to process messages.",
+      "description": "The service's last known state. A service in the Active state is ready to process messages.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -155,7 +155,7 @@
           "measurement": "application",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT first(\"state\") FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time($interval) fill(previous)",
+          "query": "SELECT first(\"state\") FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time($interval) fill(previous)",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -194,7 +194,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The application's HA Role. A micro-app in the backup Role has connected to a Primary instance and is receiving replicated transactions.",
+      "description": "The service's HA Role. A service in the backup Role has connected to a Primary instance and is receiving replicated transactions.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -277,7 +277,7 @@
           "measurement": "application",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT last(\"role\") FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
+          "query": "SELECT last(\"role\") FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
           "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
@@ -299,13 +299,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -317,7 +317,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The application's HA Policy. Indicates if this application is used State Replication or Event Sourcing.",
+      "description": "The service's HA Policy. Indicates whether this service uses State Replication or Event Sourcing.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -393,7 +393,7 @@
           "measurement": "application",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"ha_policy\" FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+          "query": "SELECT \"ha_policy\" FROM \"rumi_heartbeat_rp\".\"app\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
           "rawQuery": false,
           "refId": "A",
           "resultFormat": "time_series",
@@ -415,13 +415,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -433,7 +433,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "If the application's main class is annotated with an @AppVersion annotation or the jar it was loaded from contains an Implementation-Version or Specification-Version it is included here.",
+      "description": "If the jar the service was loaded from contains an Implementation-Version or Specification-Version in its manifest, it is shown here.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -486,7 +486,7 @@
           "calcs": [
             "lastNotNull"
           ],
-          "fields": "",
+          "fields": "/^application\\.jar_version$/",
           "values": false
         },
         "text": {
@@ -540,7 +540,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The last reported CPU Usage for the Host (including other processes) as reported in the last collected XVM heartbeat.",
+      "description": "The last reported CPU Usage for the Host (including other processes) as reported in the last collected container heartbeat.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -644,7 +644,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The total number of messages processed by the application since it was loaded. This counter does not include messages that were filtered.",
+      "description": "The total number of messages processed by the service since it was loaded. This counter does not include messages that were filtered.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -730,7 +730,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT last(\"in_value\") AS \"Msgs In\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT last(\"in_value\") AS \"Msgs In\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -758,13 +758,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -776,7 +776,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The number of Guaranteed messages this application has sourced since it was loaded. Sourced message include messages replicated from a Primary instance, recovered from a transaction log or injected by the application.",
+      "description": "The number of Guaranteed messages this service has sourced since it was loaded. Sourced message include messages replicated from a Primary instance, recovered from a transaction log or injected by the service.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -849,7 +849,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT last(\"in_sourced\") AS \"Sourced\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
+          "query": "SELECT last(\"in_sourced\") AS \"Sourced\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -872,13 +872,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -891,7 +891,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The number of messages this application has sent since it has become Active.",
+      "description": "The number of messages this service has sent since it has become Active.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -977,7 +977,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT mean(\"events_per_commit\") FROM \"rumi_heartbeat_rp\".\"app.transaction\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"events_per_commit\") FROM \"rumi_heartbeat_rp\".\"app.transaction\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time($interval) fill(null)",
           "refId": "A",
           "resultFormat": "time_series",
           "select": [
@@ -998,13 +998,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -1017,7 +1017,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The Store Object Count is useful in determining the number of objects currently held in the application's store (if it is stateful).",
+      "description": "The Store Object Count is useful in determining the number of objects currently held in the service's store (if it is stateful).",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1138,7 +1138,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The total serialized size of objects held in the application's store.",
+      "description": "The total serialized size of objects held in the service's store.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1264,7 +1264,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "The total serialized size of objects held in the application's store.",
+      "description": "The total serialized size of objects held in the service's store.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1833,7 +1833,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"in_value\" AS \"Msgs In\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter fill(null)",
+          "query": "SELECT \"in_value\" AS \"Msgs In\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -1876,7 +1876,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"in_filtered\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter",
+          "query": "SELECT \"in_filtered\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -1919,7 +1919,7 @@
           "hide": false,
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"count\" FROM \"rumi_heartbeat_rp\".\"application.transaction\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+          "query": "SELECT \"count\" FROM \"rumi_heartbeat_rp\".\"application.transaction\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -1962,7 +1962,7 @@
           "hide": true,
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"out_value\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter",
+          "query": "SELECT \"out_value\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "D",
           "resultFormat": "time_series",
@@ -1991,7 +1991,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "Shows the message receive rates in the selected time window. This chart is useful in determining if there are spikes in inbound messaging traffic or in determining if the application has stopped receiving or processing messages.",
+      "description": "Shows the message receive rates in the selected time window. This chart is useful in determining if there are spikes in inbound messaging traffic or in determining if the service has stopped receiving or processing messages.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2083,7 +2083,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT non_negative_derivative(\"in_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+          "query": "SELECT non_negative_derivative(\"in_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2107,13 +2107,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         },
@@ -2127,7 +2127,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT non_negative_derivative(\"in_filtered\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter",
+          "query": "SELECT non_negative_derivative(\"in_filtered\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -2151,13 +2151,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         },
@@ -2171,7 +2171,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT non_negative_derivative(\"count\", 1s) FROM \"rumi_heartbeat_rp\".\"application.transaction\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+          "query": "SELECT non_negative_derivative(\"count\", 1s) FROM \"rumi_heartbeat_rp\".\"application.transaction\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
           "rawQuery": true,
           "refId": "C",
           "resultFormat": "time_series",
@@ -2195,13 +2195,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -2311,7 +2311,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT \"out_value\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter",
+          "query": "SELECT \"out_value\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2340,7 +2340,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "Shows the message send rates in the selected time window. This chart is useful in determining if there are spikes in outbound messaging traffic or in determining if the application has stopped sending messages.",
+      "description": "Shows the message send rates in the selected time window. This chart is useful in determining if there are spikes in outbound messaging traffic or in determining if the service has stopped sending messages.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2432,7 +2432,7 @@
           "measurement": "application.messages",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT non_negative_derivative(\"out_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/) AND $timeFilter",
+          "query": "SELECT non_negative_derivative(\"out_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/) AND $timeFilter",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -2456,13 +2456,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             }
           ]
         }
@@ -2475,7 +2475,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This chart shows the % of the application's input queue that is used over time.\n\nThis is one of the most important indicators of an application's health: a full input queue is usually the first sign of trouble.\n\nIt means that the application is not keeping up with the inbound message load which will result in higher response latencies.\n\nTo diagnose the root cause of a temporary spike input queue usage you can zoom in such that the last selected data point in the time range is the peak of the spike, and then:\n\n* Inspect Interval Transaction Latency stats lower on the dashboard to see if there are corresponding spikes to narrow down the cause.\n  * A spike in application message processing times?\n  * A spike in store commit?\n  * A spike in message bus sending?\n* Look at the XVM stats to see if there was a spike caused by Garbage Collection or JIT.",
+      "description": "This chart shows the % of the service's input queue that is used over time.\n\nThis is one of the most important indicators of a service's health: a full input queue is usually the first sign of trouble.\n\nIt means that the service is not keeping up with the inbound message load which will result in higher response latencies.\n\nTo diagnose the root cause of a temporary spike input queue usage you can zoom in such that the last selected data point in the time range is the peak of the spike, and then:\n\n* Inspect Interval Transaction Latency stats lower on the dashboard to see if there are corresponding spikes to narrow down the cause.\n  * A spike in service message processing times?\n  * A spike in store commit?\n  * A spike in message bus sending?\n* Look at the container stats to see if there was a spike caused by Garbage Collection or JIT.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -2691,7 +2691,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This stat tracks the amount of time that messages or events sit in the application's input queue awaiting processing.",
+      "description": "This stat tracks the amount of time that messages or events sit in the service's input queue awaiting processing.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3227,7 +3227,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "The times spent in application event handlers processing messages.\n\n*Spikes or high message processing times can be indicator that performance problems lie within an application's business logic.*",
+      "description": "The times spent in service event handlers processing messages.\n\n*Spikes or high message processing times can be indicator that performance problems lie within a service's business logic.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -3288,10 +3288,6 @@
             },
             "properties": [
               {
-                "id": "unit",
-                "value": "µs"
-              },
-              {
                 "id": "custom.axisLabel",
                 "value": "Processing Time (tails)"
               }
@@ -3341,7 +3337,7 @@
           "measurement": "application.transaction.latencies",
           "orderByTime": "ASC",
           "policy": "rumi_heartbeat_rp",
-          "query": "SELECT mean(\"median\") FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"name\" = 'MsgProcessing' AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"median\") FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"name\" = 'MsgProcessing' AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "A",
           "resultFormat": "time_series",
@@ -3375,13 +3371,13 @@
             {
               "key": "app_name",
               "operator": "=~",
-              "value": "/$app_name$/"
+              "value": "/^$app_name$/"
             },
             {
               "condition": "AND",
               "key": "vm_name",
               "operator": "=~",
-              "value": "/$vm_name$/"
+              "value": "/^$vm_name$/"
             },
             {
               "condition": "AND",
@@ -3413,7 +3409,7 @@
           ],
           "orderByTime": "ASC",
           "policy": "$datasource",
-          "query": "SELECT mean(\"max\") FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"name\" = 'MsgProcessing' AND $timeFilter GROUP BY time($interval) fill(null)",
+          "query": "SELECT mean(\"max\") FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"name\" = 'MsgProcessing' AND $timeFilter GROUP BY time($interval) fill(null)",
           "rawQuery": true,
           "refId": "B",
           "resultFormat": "time_series",
@@ -3472,7 +3468,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This sections shows application defined stats",
+            "content": "This section shows stats defined by the service",
             "mode": "markdown"
           },
           "pluginVersion": "10.1.1",
@@ -3700,7 +3696,7 @@
               ]
             }
           ],
-          "title": "App Gauges",
+          "title": "Service Gauges",
           "transformations": [
             {
               "id": "merge",
@@ -3993,7 +3989,7 @@
               "tags": []
             }
           ],
-          "title": "App Counters",
+          "title": "Service Counters",
           "transformations": [
             {
               "id": "merge",
@@ -4211,7 +4207,7 @@
               "measurement": "app.store.c.latencies",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.user.series\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/  AND (\"running_sample\" > 0 OR \"sample\" > 0)  AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
+              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.user.series\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/  AND (\"running_sample\" > 0 OR \"sample\" > 0)  AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
               "rawQuery": true,
               "refId": "J",
               "resultFormat": "table",
@@ -4233,18 +4229,18 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
           ],
-          "title": "App Series",
+          "title": "Service Series",
           "transformations": [
             {
               "id": "merge",
@@ -4265,7 +4261,7 @@
           "refId": "A"
         }
       ],
-      "title": "Application Stats",
+      "title": "Service Stats",
       "type": "row"
     },
     {
@@ -4299,7 +4295,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "<div style=\"align:center\">This section lists statistics related to the application engine's transaction processing.</div>",
+            "content": "<div style=\"align:center\">This section lists statistics related to the service engine's transaction processing.</div>",
             "mode": "html"
           },
           "pluginVersion": "10.1.1",
@@ -4401,7 +4397,7 @@
               "measurement": "application.transaction",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(\"in_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT non_negative_derivative(\"in_value\", 1s) FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
@@ -4425,13 +4421,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -4854,7 +4850,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "This table shows histographical latencies for the transaction pipeline over the selected time range. Zooming in to a specific time interval can help to pinpoint the cause of jitter, and mean values can help to identify throughput bottlenecks. \n\n* **MsgPreProc**: The time from when the message was picked up from the input queue until it was dispatched to the application. *A high value in this statistic may indicate:*\n  * Message tracing costs.\n  * Message filtering costs. \n* **MsgFiltering**: The time spent in message filtering providers. *A high value in this statistic may indicate:*\n  * Costly Business Logic\n* **MsgProcessing**: Time spent in application message handlers.* A high value in this statistic may indicate:*\n  * Costly Business Logic\n* **MsgSend**: The time spent inside of AepEngine sendMessage calls (this is a sub-portion of MsgProcessing). *A high value here:*\n  * Does not indicate a slow message bus. Messages are only queued for delivery \n  * Could indicate costly message serialization or topic resolution.\n* **MsgSendCore** Time spent in core send logic (post topic resolution and other bookkeeping)\n* **CommitProlog**: Time spent from the point where transaction commit is started to when store commit starts (or send commit starts if the app has no store). *A high value in this statistic may indicate that the contents of the transaction are larger than normal.*\n* **CommitStore**: The time spent from when store commit starts until store commit completes.*A high value in this statistic indicates that store commit is costly.*\n  *... look into store stats to narrow down.\n* **CommitTransition**: The time from which the store commit has been completed to when the send commit has started. *A high value in this statistic may indicate that:*\n  * Flow control acknowledging inbound messages if acks are sent on store commit completion\n  * Platform problem.\n* **CommitSend**: The time from when send commit started (after store commit) to receipt of the last sent message acknowledgment. *A high value in this statistic may indicate that:*\n  * No problem at all, acks can come back lazily this will vary based on the messaging implementation being used.\n  * May indicate a problem if higher than other intervals.\n* **CommitTransition**: The time from which the store commit has been completed to when the send commit has started. *A high value in this statistic may indicate that:*\n  * Flow control acknowledging inbound messages if acks are sent on store commit completion\n  * Platform problem.\n* **CommitSend** The time from when send commit started (after store commit) to receipt of the last sent message acknowledgment. *A high value in this statistic may indicate that:*\n  * No problem at all, acks can come back lazily this will vary based on the messaging implementation being used.\n  * May indicate a problem if higher than other intervals.\n* **CommitEpilogue:** The time spent completing the transaction after store commit and all messages are acked. See tleg3…\n* **TransactionLeg1**: The time spent in the Engine’s Input Multiplexer Thread processing events prior to committing. Excludes time waiting for events and message processing.\n* **TransactionLeg2**: The time spent handling store commit ack and releasing messages for delivery (includes CommitTransition). *A high value here may indicate:*\n  * Flow control sending inbound message acks.\n  * Outbound Message Logger is a bottleneck.\n* **TransactionLeg3**: The time spent processing message stability events (acks), acking inbound events, doing outbound message logging and closing out the transaction, includes ‘CommitEpilogue’. *A high value here may indicate:*\n  * Flow control sending inbound message acks.\n  * Outbound Message Logger is a bottleneck.\n* **InOut**: The time spent from the receipt of the message on the wire until it is written out. *This is a good predictor of aggregate application response time.*\n* **CommitFull**: The time from when the first message in the transaction was dequeued until the transaction completes.\n* **InAck**: The time from when a message was received on the wire to its being acknowledged. *A high value here can be problematic for throughput if the messaging provider uses a windowed acknowledgment protocol that pauses delivery until it receives acknowledgments.*",
+          "description": "This table shows histographical latencies for the transaction pipeline over the selected time range. Zooming in to a specific time interval can help to pinpoint the cause of jitter, and mean values can help to identify throughput bottlenecks. \n\n* **MsgPreProc**: The time from when the message was picked up from the input queue until it was dispatched to the service. *A high value in this statistic may indicate:*\n  * Message tracing costs.\n  * Message filtering costs. \n* **MsgFiltering**: The time spent in message filtering providers. *A high value in this statistic may indicate:*\n  * Costly Business Logic\n* **MsgProcessing**: Time spent in service message handlers.* A high value in this statistic may indicate:*\n  * Costly Business Logic\n* **MsgSend**: The time spent inside of AepEngine sendMessage calls (this is a sub-portion of MsgProcessing). *A high value here:*\n  * Does not indicate a slow message bus. Messages are only queued for delivery \n  * Could indicate costly message serialization or topic resolution.\n* **MsgSendCore** Time spent in core send logic (post topic resolution and other bookkeeping)\n* **CommitProlog**: Time spent from the point where transaction commit is started to when store commit starts (or send commit starts if the service has no store). *A high value in this statistic may indicate that the contents of the transaction are larger than normal.*\n* **CommitStore**: The time spent from when store commit starts until store commit completes.*A high value in this statistic indicates that store commit is costly.*\n  *... look into store stats to narrow down.\n* **CommitTransition**: The time from which the store commit has been completed to when the send commit has started. *A high value in this statistic may indicate that:*\n  * Flow control acknowledging inbound messages if acks are sent on store commit completion\n  * Platform problem.\n* **CommitSend**: The time from when send commit started (after store commit) to receipt of the last sent message acknowledgment. *A high value in this statistic may indicate that:*\n  * No problem at all, acks can come back lazily this will vary based on the messaging implementation being used.\n  * May indicate a problem if higher than other intervals.\n* **CommitTransition**: The time from which the store commit has been completed to when the send commit has started. *A high value in this statistic may indicate that:*\n  * Flow control acknowledging inbound messages if acks are sent on store commit completion\n  * Platform problem.\n* **CommitSend** The time from when send commit started (after store commit) to receipt of the last sent message acknowledgment. *A high value in this statistic may indicate that:*\n  * No problem at all, acks can come back lazily this will vary based on the messaging implementation being used.\n  * May indicate a problem if higher than other intervals.\n* **CommitEpilogue:** The time spent completing the transaction after store commit and all messages are acked. See tleg3…\n* **TransactionLeg1**: The time spent in the Engine’s Input Multiplexer Thread processing events prior to committing. Excludes time waiting for events and message processing.\n* **TransactionLeg2**: The time spent handling store commit ack and releasing messages for delivery (includes CommitTransition). *A high value here may indicate:*\n  * Flow control sending inbound message acks.\n  * Outbound Message Logger is a bottleneck.\n* **TransactionLeg3**: The time spent processing message stability events (acks), acking inbound events, doing outbound message logging and closing out the transaction, includes ‘CommitEpilogue’. *A high value here may indicate:*\n  * Flow control sending inbound message acks.\n  * Outbound Message Logger is a bottleneck.\n* **InOut**: The time spent from the receipt of the message on the wire until it is written out. *This is a good predictor of aggregate service response time.*\n* **CommitFull**: The time from when the first message in the transaction was dequeued until the transaction completes.\n* **InAck**: The time from when a message was received on the wire to its being acknowledged. *A high value here can be problematic for throughput if the messaging provider uses a windowed acknowledgment protocol that pauses delivery until it receives acknowledgments.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -5058,7 +5054,7 @@
               "measurement": "app.mpproc.latencies",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\"  FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND sample > 0 AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
+              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\"  FROM \"rumi_heartbeat_rp\".\"application.transaction.latencies\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND sample > 0 AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
               "rawQuery": true,
               "refId": "Q",
               "resultFormat": "table",
@@ -5080,13 +5076,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5149,7 +5145,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This section shows stats related to the application's store and data files. ",
+            "content": "This section shows stats related to the service's store and data files. ",
             "mode": "markdown"
           },
           "pluginVersion": "10.1.1",
@@ -5234,7 +5230,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT first(\"state\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(none)",
+              "query": "SELECT first(\"state\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(none)",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5255,13 +5251,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5339,7 +5335,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"role\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT last(\"role\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5360,13 +5356,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5444,7 +5440,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"icr_role\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT last(\"icr_role\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5465,13 +5461,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5549,7 +5545,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5566,13 +5562,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5652,7 +5648,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5669,13 +5665,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             },
@@ -5690,7 +5686,7 @@
               "measurement": "application.store.persister",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT last(\"size\") FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "refId": "B",
               "resultFormat": "time_series",
               "select": [
@@ -5707,13 +5703,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5803,7 +5799,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(last(\"commit_commits_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
+              "query": "SELECT non_negative_derivative(last(\"commit_commits_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5824,13 +5820,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -5920,7 +5916,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(last(\"commit_commits_rcvd\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
+              "query": "SELECT non_negative_derivative(last(\"commit_commits_rcvd\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -5941,13 +5937,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -6037,7 +6033,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(last(\"commit_commits_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
+              "query": "SELECT non_negative_derivative(last(\"commit_commits_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.store\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(1s) fill(none)",
               "refId": "A",
               "resultFormat": "time_series",
               "select": [
@@ -6060,13 +6056,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -6262,7 +6258,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "The store persister stats table shows the last reported stats for the store's transaction log:\n\n* **﻿Commits**: ﻿The number of transaction log commits.\n* **Puts**: The number of entity 'puts' recorded by the persister.\n* **Updates**: The number of entity 'updates' recorded by the persister.\n* **Removes**: The number of entity 'removes' recorded by the persister.\n* **Sends**: The number of message 'sends' recorded by the persister. For a StateReplication application outbound message count towards this value, for EventSourcing inbound messages count towards this value.\n* **File Size**: This represents the actual size of the log file currently allocated. This may differs from getFileSizeUsed() in that this value may be greater if the log has been preallocated to a larger size.\n* **File Size Used**: This represents the amount of space used in the log file which may be less than the size on disk if the file has been preallocated to a larger size.",
+          "description": "The store persister stats table shows the last reported stats for the store's transaction log:\n\n* **﻿Commits**: ﻿The number of transaction log commits.\n* **Puts**: The number of entity 'puts' recorded by the persister.\n* **Updates**: The number of entity 'updates' recorded by the persister.\n* **Removes**: The number of entity 'removes' recorded by the persister.\n* **Sends**: The number of message 'sends' recorded by the persister. For a StateReplication service outbound message count towards this value, for EventSourcing inbound messages count towards this value.\n* **File Size**: This represents the actual size of the log file currently allocated. This may differs from getFileSizeUsed() in that this value may be greater if the log has been preallocated to a larger size.\n* **File Size Used**: This represents the amount of space used in the log file which may be less than the size on disk if the file has been preallocated to a larger size.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -10670,7 +10666,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "The Host disk space graph shows free disk space over time for the volumes on which the application is running.",
+          "description": "The Host disk space graph shows free disk space over time for the volumes on which the service is running.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -11009,7 +11005,7 @@
               "measurement": "app.store.c.latencies",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.store.latencies\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
+              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.store.latencies\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC",
               "rawQuery": true,
               "refId": "J",
               "resultFormat": "table",
@@ -11031,13 +11027,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 }
               ]
             }
@@ -11377,7 +11373,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "The inbound messages table shows the current counts and rates by each message type. This can be used to break down the rates reported in the overview panel's single stats.\n\n*The message counts reported in the table show both the running total since the application was loaded, and the counts within the selected time interval. The latter counts use the (int) suffix.* \n\n* **Message Type**: The simple class name of the message suffixed by its factory id, and type id. \n* **In**: The total number of messages processed by the application since it was loaded. This counter does not include messages that were filtered.\n* **Received**: The number of live messages this application has received from a message bus since it has become Active\n* **Sourced**: The number of messages this application has sourced since it was loaded. Sourced message include messages replicated from a Primary instance, recovered from a transaction log or injected by the application.\n* **Filtered**: The number of messages this application has filtered via a Message Filter. statistic since it was loaded.\n* **Duplicates**: The number of duplicate messages the application has received since it was loaded.",
+          "description": "The inbound messages table shows the current counts and rates by each message type. This can be used to break down the rates reported in the overview panel's single stats.\n\n*The message counts reported in the table show both the running total since the service was loaded, and the counts within the selected time interval. The latter counts use the (int) suffix.* \n\n* **Message Type**: The simple class name of the message suffixed by its factory id, and type id. \n* **In**: The total number of messages processed by the service since it was loaded. This counter does not include messages that were filtered.\n* **Received**: The number of live messages this service has received from a message bus since it has become Active\n* **Sourced**: The number of messages this service has sourced since it was loaded. Sourced message include messages replicated from a Primary instance, recovered from a transaction log or injected by the service.\n* **Filtered**: The number of messages this service has filtered via a Message Filter. statistic since it was loaded.\n* **Duplicates**: The number of duplicate messages the service has received since it was loaded.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -11570,7 +11566,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the time from when a message was created to when it was queued for processing by the engine. \n\nThe creation timestamp is dependent on the source of the messsage: \n* For a message received from a message bus the creation time is the time at which the message was deserialized by the message bus binding. \n* For a message injected into the engine it is the time at which the the application created the message. \n* For a message recovered from a transaction log or received by a backup instance via cluster replication it is the time at which the message was materialized into a message view. \n\nStats:\n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the XVMs sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
+          "description": "This table shows the time from when a message was created to when it was queued for processing by the engine. \n\nThe creation timestamp is dependent on the source of the messsage: \n* For a message received from a message bus the creation time is the time at which the message was deserialized by the message bus binding. \n* For a message injected into the engine it is the time at which the the service created the message. \n* For a message recovered from a transaction log or received by a backup instance via cluster replication it is the time at which the message was materialized into a message view. \n\nStats:\n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the container's sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -11827,7 +11823,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the time amount of time that messages spent in the engine's input queue. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the XVMs sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
+          "description": "This table shows the time amount of time that messages spent in the engine's input queue. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the container's sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -12084,7 +12080,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the time from when a message was created to when it was queued for processing by the engine. \n\nThe creation timestamp is dependent on the source of the messsage: \n* For a message received from a message bus the creation time is the time at which the message was deserialized by the message bus binding. \n* For a message injected into the engine it is the time at which the the application created the message. \n* For a message recovered from a transaction log or received by a backup instance via cluster replication it is the time at which the message was materialized into a message view. \n\nStats:\n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the XVMs sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
+          "description": "This table shows the histographical break down of the time spent in message filtering providers, by message type, aggregated over the selected time interval. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the container's sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -12296,7 +12292,7 @@
               "measurement": "application.messages.type",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"msg_name\") AS \"Message Name\", sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.messages.type.latencies\" WHERE \"vm_name\" =~ /^$vm_name$/ AND \"app_name\" =~ /^$app_name$/ AND \"name\" =~ /CreateToOffer/ AND (\"running_sample\" > 0 OR \"sample\" > 0) AND $timeFilter GROUP BY \"msg_id\" ORDER BY time ASC",
+              "query": "SELECT last(\"msg_name\") AS \"Message Name\", sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\" FROM \"rumi_heartbeat_rp\".\"application.messages.type.latencies\" WHERE \"vm_name\" =~ /^$vm_name$/ AND \"app_name\" =~ /^$app_name$/ AND \"name\" =~ /MsgFiltering/ AND (\"running_sample\" > 0 OR \"sample\" > 0) AND $timeFilter GROUP BY \"msg_id\" ORDER BY time ASC",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -12325,7 +12321,7 @@
               ]
             }
           ],
-          "title": "Message Create To Offer Times",
+          "title": "Message Filtering Times",
           "transformations": [
             {
               "id": "merge",
@@ -12341,7 +12337,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the histographical break down of message processing times aggregate over the selected time interval. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the XVMs sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
+          "description": "This table shows the histographical break down of message processing times aggregate over the selected time interval. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the container's sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -12607,7 +12603,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the histographical break down of message processing times aggregate over the selected time interval. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the XVMs sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
+          "description": "This table shows the histographical break down of message processing times aggregate over the selected time interval. \n\n* **Sample**: The number of messages over which the data is aggregated. If 'Skipped' is 0 then all messages received during the selected time window are included in the histogram.\n* **Skipped**: If the message rate is higher than the container's sampling frequency, the cyclical buffer used to hold sampled data can wrap causing some collected points to be excluded for the histogram. This counter reflects how many points were skipped due to under sampling.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -12949,7 +12945,7 @@
             "type": "influxdb",
             "uid": "${datasource}"
           },
-          "description": "This table shows the current counts and rates by each message type. This can be used to break down the rates reported in the overview panel's single stats.\n\n*The message counts reported in the table show both the running total since the application was loaded, and the counts within the selected time interval. The latter counts use the (int) suffix.* \n\n* **Sent**: The number of messages of this type that were sent by the application. \n* **Resent**: The number of messages of this type that were retransmitted.",
+          "description": "This table shows the current counts and rates by each message type. This can be used to break down the rates reported in the overview panel's single stats.\n\n*The message counts reported in the table show both the running total since the service was loaded, and the counts within the selected time interval. The latter counts use the (int) suffix.* \n\n* **Sent**: The number of messages of this type that were sent by the service. \n* **Resent**: The number of messages of this type that were retransmitted.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -13142,7 +13138,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This section shows stats related to the application's '<b>$bus_name</b>' bus",
+            "content": "This section shows stats related to the service's '<b>$bus_name</b>' bus",
             "mode": "html"
           },
           "pluginVersion": "10.1.1",
@@ -13233,7 +13229,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
+              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
               "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
@@ -13261,13 +13257,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -13366,7 +13362,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
+              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
               "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
@@ -13394,13 +13390,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -13500,7 +13496,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
+              "query": "SELECT last(\"msgs_rcvd\") AS \"Msgs Rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY time(10s) fill(previous)",
               "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
@@ -13528,13 +13524,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -14056,7 +14052,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT \"msgs_rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter ",
+              "query": "SELECT \"msgs_rcvd\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter ",
               "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
@@ -14084,13 +14080,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -14123,7 +14119,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT \"msgs_sent\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter",
+              "query": "SELECT \"msgs_sent\" FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -14151,13 +14147,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -14280,7 +14276,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(last(\"msgs_rcvd\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter GROUP BY time(1s) fill(none)",
+              "query": "SELECT non_negative_derivative(last(\"msgs_rcvd\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter GROUP BY time(1s) fill(none)",
               "rawQuery": true,
               "refId": "B",
               "resultFormat": "time_series",
@@ -14308,13 +14304,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -14347,7 +14343,7 @@
               "measurement": "application.bus",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(last(\"msgs_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter GROUP BY time(1s) fill(none)",
+              "query": "SELECT non_negative_derivative(last(\"msgs_sent\"), 1s) FROM \"rumi_heartbeat_rp\".\"application.bus\" WHERE (\"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/) AND $timeFilter GROUP BY time(1s) fill(none)",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -14375,13 +14371,13 @@
                 {
                   "key": "app_name",
                   "operator": "=~",
-                  "value": "/$app_name$/"
+                  "value": "/^$app_name$/"
                 },
                 {
                   "condition": "AND",
                   "key": "vm_name",
                   "operator": "=~",
-                  "value": "/$vm_name$/"
+                  "value": "/^$vm_name$/"
                 },
                 {
                   "condition": "AND",
@@ -14933,7 +14929,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "**Inbound Message Latency Stats**\n* **Wire**: The time just before the message was written to the wire by sending application to time just after receipt\n\n  **This value is subject to clock skew!**\n  \n  On the receiver side this value is computed from the time the message provider API passes the message to the platform (it includes time spent in message provider apis), *A higher time relative to other intervals may indicate message bus or network latency issues.*\n* **WireToDeserialize**: The time spent in the message provider prior to the message being materialized in object form. *A high value here indicates that there are delays in the bus binding code path prior to deserialization (e.g.provider specific bus binding logic)*\n* **Deserialize**: The time spent deserializing the message into an object. *A high value here may indicate inefficient encoding or large / complex messages.*\n* **DeserializeToReceive**: The time from when serialization completes to just before the message is written to the wire or provider send API. *A high value here generally indicates that the message sat in the application’s input queue.*\n* **Origin2Receive**: The time spent from the point the message was created on the sender side to being received by the application for processing. \n\n  **This value is subject to clock skew!**\n\n  *A high value here could be caused by any of the send / receive path before this.\nRequires message bus binding support for propagating origin timestamp.*\n\n---\n\n**Outbound Message Latency Stats**\n* **CreateToSend**: The time from when the message was created until it was 'offered' to the bus binding for send. *A high value in this statistic may be indicative of:*\n  * significant time spent populating the message.\n  * significant business logic before the message was sent\n  * a delay in replication prior to committing the message. \n* **SendToSerialize**: The time spent from the point at which the message is 'offered' to the binding for send until just before the binding is serialized into the underlying transport. *A high value here indicates that there are delays in the bus binding code path prior to serialization (e.g. binding is busy serializing / sending previous messages.*\n* **Serialize**: The time spent serializing the MessageView to its transport encoding. *A high value here indicates that message may be using an inefficient encoding or that messages are large or complex.*\n* **SerializeToWire**: The time from when serialization completes to just before the message is written to the wire or provider send API. *A high value here usually indicates overhead in the bus binding implementation.*\n* **WireSend (ws)**: The time spent in the provider send call and/or writing to the network. *A high value here indicates that there are delays in the bus binding code path prior to serialization (e.g. binding is busy serializing / sending previous messages.*",
+          "description": "**Inbound Message Latency Stats**\n* **Wire**: The time just before the message was written to the wire by sending service to time just after receipt\n\n  **This value is subject to clock skew!**\n  \n  On the receiver side this value is computed from the time the message provider API passes the message to the platform (it includes time spent in message provider apis), *A higher time relative to other intervals may indicate message bus or network latency issues.*\n* **WireToDeserialize**: The time spent in the message provider prior to the message being materialized in object form. *A high value here indicates that there are delays in the bus binding code path prior to deserialization (e.g.provider specific bus binding logic)*\n* **Deserialize**: The time spent deserializing the message into an object. *A high value here may indicate inefficient encoding or large / complex messages.*\n* **DeserializeToReceive**: The time from when serialization completes to just before the message is written to the wire or provider send API. *A high value here generally indicates that the message sat in the service's input queue.*\n* **Origin2Receive**: The time spent from the point the message was created on the sender side to being received by the service for processing. \n\n  **This value is subject to clock skew!**\n\n  *A high value here could be caused by any of the send / receive path before this.\nRequires message bus binding support for propagating origin timestamp.*\n\n---\n\n**Outbound Message Latency Stats**\n* **CreateToSend**: The time from when the message was created until it was 'offered' to the bus binding for send. *A high value in this statistic may be indicative of:*\n  * significant time spent populating the message.\n  * significant business logic before the message was sent\n  * a delay in replication prior to committing the message. \n* **SendToSerialize**: The time spent from the point at which the message is 'offered' to the binding for send until just before the binding is serialized into the underlying transport. *A high value here indicates that there are delays in the bus binding code path prior to serialization (e.g. binding is busy serializing / sending previous messages.*\n* **Serialize**: The time spent serializing the MessageView to its transport encoding. *A high value here indicates that message may be using an inefficient encoding or that messages are large or complex.*\n* **SerializeToWire**: The time from when serialization completes to just before the message is written to the wire or provider send API. *A high value here usually indicates overhead in the bus binding implementation.*\n* **WireSend (ws)**: The time spent in the provider send call and/or writing to the network. *A high value here indicates that there are delays in the bus binding code path prior to serialization (e.g. binding is busy serializing / sending previous messages.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -15152,7 +15148,7 @@
               ],
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\"  FROM \"rumi_heartbeat_rp\".\"application.bus.latencies\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND \"bus_name\" =~ /$bus_name$/ AND $timeFilter  GROUP BY \"name\" ORDER BY time ASC",
+              "query": "SELECT sum(\"sample\") AS \"Sample\", (last(\"skipped\") - min(\"skipped\")) AS \"Skipped\", median(\"median\") AS \"median\", mean(\"mean\") AS \"mean\", min(\"min\") AS \"min\", mean(\"pct75\") AS \"75%ile\", mean(\"pct90\") AS \"90%ile\", mean(\"pct99\") AS \"99%ile\", mean(\"pct999\") AS \"99.9%ile\", mean(\"pct9999\") AS \"99.99%ile\", max(\"max\") AS \"max\"  FROM \"rumi_heartbeat_rp\".\"application.bus.latencies\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND \"bus_name\" =~ /^$bus_name$/ AND $timeFilter  GROUP BY \"name\" ORDER BY time ASC",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -15229,7 +15225,7 @@
               "showLineNumbers": false,
               "showMiniMap": false
             },
-            "content": "This section shows memory related stats for the application. \n<br>\n<br><i>Note: Pool and Memory usage are technically JVM wide stats, and typically affect all applications in the JVM. They are shown here for correlation purposes. </i>",
+            "content": "This section shows memory related stats for the service. \n<br>\n<br><i>Note: Pool and Memory usage are technically JVM wide stats, and typically affect all services in the JVM. They are shown here for correlation purposes. </i>",
             "mode": "html"
           },
           "pluginVersion": "10.1.1",
@@ -15239,7 +15235,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "This graph shows the heap memory usage for the process as reported by the last heartbeat received from the XVM.\n\n* **Heap Used**: The amount of heap memory currently used by the application. \n* **Heap Init**: The amount of heap memory that the Java virtual machine initially requested from the operating system.\n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum amount of memory in bytes that can be used for heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+          "description": "This graph shows the heap memory usage for the process as reported by the last heartbeat received from the container.\n\n* **Heap Used**: The amount of heap memory currently used by the service. \n* **Heap Init**: The amount of heap memory that the Java virtual machine initially requested from the operating system.\n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum amount of memory in bytes that can be used for heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -15380,7 +15376,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this XVM.\n\n* **Off-Heap Used**: The amount of off-heap memory used by the process in which the application is running. \n* **Off-Heap Init**: The amount of off-heap memory that the Java virtual machine initially requests from the operating system.\n* **Off-Heap Committed**: This amount of off-heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Off-Heap Max**: The maximum amount memory in bytes that can be used for off-heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+          "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this container.\n\n* **Off-Heap Used**: The amount of off-heap memory used by the process in which the service is running. \n* **Off-Heap Init**: The amount of off-heap memory that the Java virtual machine initially requests from the operating system.\n* **Off-Heap Committed**: This amount of off-heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Off-Heap Max**: The maximum amount memory in bytes that can be used for off-heap memory management.\n\n  This amount of memory is not guaranteed to be available for memory management if it is greater than the amount of committed memory. The Java virtual machine may fail to allocate memory even if the amount of used memory does not exceed this maximum size.\n\n  A value of -1 indicates that the maximum memory size is undefined.\n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -15522,7 +15518,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this XVM.\n\n* **Bytes Live (Native)**: The amount of live off-heap memory that the process has directly allocated as native memory blocks. \n* **Bytes Live (IOBuf)**: The amount of live off-heap memory that the process is using via allocated IO Buffers. \n* **Bytes Pooled**: This amount of off-heap memory pooled/cached for future use.",
+          "description": "This graph shows the off-heap memory usage for the process as reported by the last heartbeat received from this container.\n\n* **Bytes Live (Native)**: The amount of live off-heap memory that the process has directly allocated as native memory blocks. \n* **Bytes Live (IOBuf)**: The amount of live off-heap memory that the process is using via allocated IO Buffers. \n* **Bytes Pooled**: This amount of off-heap memory pooled/cached for future use.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -15664,7 +15660,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "This graph shows overall memory usage for the host on which this XVM is running as reported by the last heartbeat received from this XVM. \n\n* **Host Used**: The total amount of physical memory currently in use on the host. \n* **Host Total**: The total amount of physical memory on the host. \n\n*The values shown are current to the last reported heartbeat collected by this XVM. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
+          "description": "This graph shows overall memory usage for the host on which this container is running as reported by the last heartbeat received from this container. \n\n* **Host Used**: The total amount of physical memory currently in use on the host. \n* **Host Total**: The total amount of physical memory on the host. \n\n*The values shown are current to the last reported heartbeat collected by this container. If no heartbeats have been reported in the selected time interval, then no data will be shown.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -20218,7 +20214,7 @@
               "measurement": "system_entity_memory",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='embedded_entity' AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
+              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='embedded_entity' AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -20388,7 +20384,7 @@
               "measurement": "system_entity_memory",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='state_entity' AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
+              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='state_entity' AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -20557,7 +20553,7 @@
               "measurement": "system_entity_memory",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='message' AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
+              "query": "SELECT last(\"short_name\") as \"Name\", last(\"memory_entity_count_live\") AS \"Live\", last(\"memory_entity_count_pooled\") AS \"Pooled\", last(\"memory_entity_pojo_count_live\") AS \"P-Live\", last(\"memory_entity_pojo_count_pooled\") AS \"P-Pooled\", last(\"memory_entity_serializer_count_live\") AS \"S-Live\", last(\"memory_entity_serializer_count_pooled\") AS \"S-Pooled\", last(\"memory_entity_deserializer_count_live\") AS \"D-Live\", last(\"memory_entity_deserializer_count_pooled\") AS \"D-Pooled\", last(\"memory_entity_data_count_live\") AS \"Da Live Count\", last(\"memory_entity_data_bytes_live\") AS \"Da Live Bytes\" FROM \"rumi_heartbeat_rp\".\"system.entity_memory\" WHERE \"type\"='message' AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter GROUP BY \"name\" ORDER BY time ASC\n",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "table",
@@ -20682,7 +20678,7 @@
               "measurement": "system",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(\"in_value\", 1s) AS \"Inbound\", non_negative_derivative(\"out_value\", 1s)  AS \"Outbound\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT non_negative_derivative(\"in_value\", 1s) AS \"Inbound\", non_negative_derivative(\"out_value\", 1s)  AS \"Outbound\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "rawQuery": false,
               "refId": "A",
               "resultFormat": "time_series",
@@ -20960,7 +20956,7 @@
               "measurement": "application.store",
               "orderByTime": "ASC",
               "policy": "rumi_heartbeat_rp",
-              "query": "SELECT non_negative_derivative(\"in_value\", 1s) AS \"Inbound\", non_negative_derivative(\"out_value\", 1s)  AS \"Outbound\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /$app_name$/ AND \"vm_name\" =~ /$vm_name$/ AND $timeFilter",
+              "query": "SELECT non_negative_derivative(\"in_value\", 1s) AS \"Inbound\", non_negative_derivative(\"out_value\", 1s)  AS \"Outbound\" FROM \"rumi_heartbeat_rp\".\"application.messages\" WHERE \"app_name\" =~ /^$app_name$/ AND \"vm_name\" =~ /^$vm_name$/ AND $timeFilter",
               "rawQuery": true,
               "refId": "A",
               "resultFormat": "time_series",
@@ -21002,7 +20998,7 @@
           "datasource": {
             "uid": "$datasource"
           },
-          "description": "Plots the store size over the selected time window. This chart is useful in determining if memory usage patterns correlate to growth in application state.",
+          "description": "Plots the store size over the selected time window. This chart is useful in determining if memory usage patterns correlate to growth in service state.",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -21193,7 +21189,7 @@
             "type": "influxdb",
             "uid": "$datasource"
           },
-          "description": "* **Pool Name﻿**: The unique name of the pool within the JVM. \n* **Puts**﻿: The number of objects added or returned to the pool.\n* **Gets**: The number of objects obtained from the pool.\n﻿* **Misses**: ﻿The number of pool 'gets' that caused a new object to be allocated.\n  * A positive value here indicates a pool leak which a cause for concern of a zero garbage application. \n* **Hits**: The number of pool 'gets' that found an available object from the pool (either preallocated or a previously returned object).\n* **Growths**: The number of times the pool's capacity was increased to accommodate objects 'put' into the pool.\n* **Evicts**: The number of objects that were not 'put' into the pool because the pool had insufficient capacity.\n* **Washes**: The number of objects that were re-initialized in a detached thread. \n* **Size**: ﻿The last reported count of objects in the pool that are available for a caller to 'get' without a miss. \n  * *A value of 0 here is not a cause for concern, healthy pools will frequently have a low count of unused objects.*\n* **﻿Preallocated**: ﻿The last reported number of preallocated objects remaining in the pool.\n* **Capacity**: ﻿The last reported size of the backing array used to hold objects that are currently not in use. A pool's capacity may grow over time to accommodate holding batches of objects returned to the pool. \n---\nNote that stats for a given pool are not reported on every heartbeat. Pool stats are currently only reported when the following occurs:\n\n* There was a 'miss' during the heartbeat collection interval. \n* The pool's preallocated capacity fell below a reporting threshold. \n* The pool's Size hit a new high water mark. \n* The pool's Capacity was increased. \n\n*This means that for any given time window, the pool stats shown in this table will be limited to pools for which any of the above criteria were met.*",
+          "description": "* **Pool Name﻿**: The unique name of the pool within the JVM. \n* **Puts**﻿: The number of objects added or returned to the pool.\n* **Gets**: The number of objects obtained from the pool.\n﻿* **Misses**: ﻿The number of pool 'gets' that caused a new object to be allocated.\n  * A positive value here indicates a pool leak which a cause for concern of a zero garbage service. \n* **Hits**: The number of pool 'gets' that found an available object from the pool (either preallocated or a previously returned object).\n* **Growths**: The number of times the pool's capacity was increased to accommodate objects 'put' into the pool.\n* **Evicts**: The number of objects that were not 'put' into the pool because the pool had insufficient capacity.\n* **Washes**: The number of objects that were re-initialized in a detached thread. \n* **Size**: ﻿The last reported count of objects in the pool that are available for a caller to 'get' without a miss. \n  * *A value of 0 here is not a cause for concern, healthy pools will frequently have a low count of unused objects.*\n* **﻿Preallocated**: ﻿The last reported number of preallocated objects remaining in the pool.\n* **Capacity**: ﻿The last reported size of the backing array used to hold objects that are currently not in use. A pool's capacity may grow over time to accommodate holding batches of objects returned to the pool. \n---\nNote that stats for a given pool are not reported on every heartbeat. Pool stats are currently only reported when the following occurs:\n\n* There was a 'miss' during the heartbeat collection interval. \n* The pool's preallocated capacity fell below a reporting threshold. \n* The pool's Size hit a new high water mark. \n* The pool's Capacity was increased. \n\n*This means that for any given time window, the pool stats shown in this table will be limited to pools for which any of the above criteria were met.*",
           "fieldConfig": {
             "defaults": {
               "color": {
@@ -21474,7 +21470,7 @@
         "definition": "",
         "hide": 0,
         "includeAll": false,
-        "label": "VM",
+        "label": "Container",
         "multi": false,
         "multiFormat": "glob",
         "name": "vm_name",
@@ -21503,7 +21499,7 @@
         "definition": "",
         "hide": 0,
         "includeAll": true,
-        "label": "Application",
+        "label": "Service",
         "multi": false,
         "multiFormat": "glob",
         "name": "app_name",

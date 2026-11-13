@@ -15,7 +15,7 @@
       }
     ]
   },
-  "description": "Shows Statistics Collected from XVMS on a given host.",
+  "description": "Shows statistics collected from the containers on a given host.",
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 1,
@@ -66,7 +66,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This table summarizes high-level resource usage for each XVM that reported stats during the selected time interval. \n\nClicking on a row will take you to the XVM dashboard for the XVM. \n\n* **Last Heartbeat**: The time of last collected heartbeat for the XVM. \n* **XVM**: The name of the XVM.\n* **Loaded Time**: The time at which the XVM was loaded.\n* **CPU**: The last reported value of recent CPU usage by the XVM's process. \n* **Heap Used**: The amount of used heap memory currently in use. \n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum heap memory size in bytes.\n* **Off Heap**: The amount of used off-heap memory in bytes.\n\n*XVMs that have since been terminated will be listed here until none of their collected heartbeats fall within the selected time interval.*",
+      "description": "This table summarizes high-level resource usage for each container that reported stats during the selected time interval. \n\nClicking on a row will take you to the Container dashboard for the container. \n\n* **Last Heartbeat**: The time of last collected heartbeat for the container. \n* **Container**: The name of the container.\n* **Loaded Time**: The time at which the container was loaded.\n* **CPU**: The last reported value of recent CPU usage by the container's process. \n* **Heap Used**: The amount of used heap memory currently in use. \n* **Heap Committed**: The amount of heap memory guaranteed (committed) for the Java virtual machine to use.\n* **Heap Max**: The maximum heap memory size in bytes.\n* **Off Heap**: The amount of used off-heap memory in bytes.\n\n*Containers that have since been terminated will be listed here until none of their collected heartbeats fall within the selected time interval.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -142,7 +142,7 @@
             "properties": [
               {
                 "id": "displayName",
-                "value": "VM"
+                "value": "Container"
               },
               {
                 "id": "unit",
@@ -355,7 +355,7 @@
           "tags": []
         }
       ],
-      "title": "XVMs",
+      "title": "Containers",
       "transformations": [
         {
           "id": "merge",
@@ -397,7 +397,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This table lists the amount of free disk space available on each volume discovered by XVMs running on the target host. \n\nThe values shown are current to the last reported heartbeat collected by an XVM running on the host. If no heartbeats have been reported by any XVM in the selected time interval, then no data will be shown.",
+      "description": "This table lists the amount of free disk space available on each volume discovered by containers running on the target host. \n\nThe values shown are current to the last reported heartbeat collected by a container running on the host. If no heartbeats have been reported by any container in the selected time interval, then no data will be shown.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -611,7 +611,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows total available memory and used memory as reported by the last heartbeat received from an XVM running on the host. \n\nThe values shown are current to the last reported heartbeat collected by an XVM running on the host. If no heartbeats have been reported by any XVM in the selected time interval, then no data will be shown.",
+      "description": "This graph shows total available memory and used memory as reported by the last heartbeat received from a container running on the host. \n\nThe values shown are current to the last reported heartbeat collected by a container running on the host. If no heartbeats have been reported by any container in the selected time interval, then no data will be shown.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -819,7 +819,7 @@
         "type": "influxdb",
         "uid": "$datasource"
       },
-      "description": "This graph shows total cpu usage as reported by the last heartbeat received from an XVM running on the host. \n\nThe values shown are current to the last reported heartbeat collected by an XVM running on the host. If no heartbeats have been reported by any XVM in the selected time interval, then no data will be shown.",
+      "description": "This graph shows total cpu usage as reported by the last heartbeat received from a container running on the host. \n\nThe values shown are current to the last reported heartbeat collected by a container running on the host. If no heartbeats have been reported by any container in the selected time interval, then no data will be shown.",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -984,7 +984,7 @@
       "datasource": {
         "uid": "$datasource"
       },
-      "description": "This panel shows the last reported CPU usage by any thread for which stats were collected in the selected time range.\n\n* **XVM**: ﻿The XVM that owns the thread. \n* **ID**: ﻿The Thread ID.\n* **Thread Name**: ﻿The name of the thread. \n* **Affinity**: ﻿When threads are pinned to one or more cores, the affinity information is displayed here. \n* **CPU**: ﻿The percentage of CPU time per interval used by the thread. Note that this can be thought of as the number of cycles used on a logical core of the host. \n* **USER**: ﻿The percentage of the processing time that was in user mode (vs kernel). \n* **﻿WAIT**: ﻿The percentage of time that the thread spent waiting in a disruptor. This is particularly useful if the thread is configured with a disruptor wait strategy of busy spin or yielding as it can tell what portion of used CPU time the thread spent spinning. \n\n*If a thread has since stopped, it's last reported CPU will continue to be displayed until it's activity is no longer reflected in the selected time window.*",
+      "description": "This panel shows the last reported CPU usage by any thread for which stats were collected in the selected time range.\n\n* **Container**: ﻿The container that owns the thread. \n* **ID**: ﻿The Thread ID.\n* **Thread Name**: ﻿The name of the thread. \n* **Affinity**: ﻿When threads are pinned to one or more cores, the affinity information is displayed here. \n* **CPU**: ﻿The percentage of CPU time per interval used by the thread. Note that this can be thought of as the number of cycles used on a logical core of the host. \n* **USER**: ﻿The percentage of the processing time that was in user mode (vs kernel). \n* **﻿WAIT**: ﻿The percentage of time that the thread spent waiting in a disruptor. This is particularly useful if the thread is configured with a disruptor wait strategy of busy spin or yielding as it can tell what portion of used CPU time the thread spent spinning. \n\n*If a thread has since stopped, it's last reported CPU will continue to be displayed until it's activity is no longer reflected in the selected time window.*",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -1405,7 +1405,7 @@
         "definition": "",
         "hide": 2,
         "includeAll": false,
-        "label": "XVM",
+        "label": "Container",
         "multi": false,
         "name": "vm_name",
         "options": [],

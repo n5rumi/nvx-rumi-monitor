@@ -10,7 +10,7 @@ datasources:
     jsonData:
       httpMode: GET
     secureJsonData:
-      password:
+      password: rootroot
     version: 1
     editable: true
     isDefault: true
