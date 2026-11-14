@@ -43,7 +43,7 @@ rumi-monitor-release-10.1.1 ──► TeamCity Monitor_Docker (10.1.1-RELEASE)
                                   push neeve/nvx-rumi-monitor:10.1.1.<n>, :10.1.1.latest, :latest
                                         │
                                         ▼
-                   bake-rumi-ami skill (nvx-rumi-management Packer template)
+                   same build, last step "Monitor AMI Bake" (nvx-rumi-management Packer template)
                    nvx-rumi-monitor-amzn2023-x86_64-v10.1.1.<n> in Engg-DevOps
                                         │
                                         ▼
@@ -52,12 +52,14 @@ rumi-monitor-release-10.1.1 ──► TeamCity Monitor_Docker (10.1.1-RELEASE)
 ```
 
 - **TeamCity:** `Rumi / Management / Monitor / Docker`. `Monitor_Docker` is the release (manual,
-  version `10.1.1.<build counter>`); `Monitor_Docker_1011snapshot` builds on every commit and pushes
-  nothing. Neither bakes an AMI.
+  version `10.1.1.<build counter>`). Since 10.1.1.9 (RUMI-496) its last step also bakes the monitor
+  AMI, so an image and its AMI always share a version. `Monitor_Docker_1011snapshot` builds on every
+  commit, pushes nothing and bakes nothing.
 - **AMI:** the recipe is `nvx-rumi-cloud/src/main/resources/scripts/amzn/monitor/bake.sh` in
   `nvx-rumi-management`: Docker + `docker run --restart=always --network=host` of the pinned tag,
-  data in `/home/rumi/grafana-data`. Every new AMI must be shared with the Paywhere and Datafye
-  accounts by hand before anything points at it.
+  data in `/home/rumi/grafana-data`. The bake shares only with the N5 OUs. Paywhere and Datafye are
+  granted separately, and only once the AMI is certified: sharing an uncertified AMI with an outside
+  org would let it be launched before anyone has vouched for it.
 - **The dashboards also ship standalone** for customers who run their own Grafana; the docs live in
   `nvx-rumi-docs` under `management/guides/monitor/` and `management/reference/monitor/`.
 
